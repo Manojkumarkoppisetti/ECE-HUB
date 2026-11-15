@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Electronic components, a VLSI learning roadmap, and 3D component models for ECE students." />
+  <title>ECE Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap bar">
+      <a href="#top" class="brand">ECE<span>Hub</span></a>
+      <nav>
+        <a href="#parts">Parts</a>
+        <a href="#roadmap">VLSI roadmap</a>
+        <a href="#lab">3D lab</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="intro wrap">
+      <h1>Parts, roadmap, and 3D models for ECE students.</h1>
+      <p>Look up what each component does, follow a step-by-step path into chip design, and rotate component models in your browser.</p>
+    </section>
+
+    <section id="parts" class="wrap section">
+      <h2>Electronic components</h2>
+      <div class="tools">
+        <input id="search" type="search" placeholder="Search by name or function" aria-label="Search components" />
+        <div id="filters" class="filters" role="group" aria-label="Filter by category"></div>
+      </div>
+      <div id="parts-list" class="parts" role="list"></div>
+    </section>
+
+    <section id="roadmap" class="wrap section">
+      <h2>VLSI roadmap</h2>
+      <p class="muted">Work through the phases in order. Each one builds on the last.</p>
+      <ol id="timeline" class="timeline"></ol>
+    </section>
+
+    <section id="lab" class="wrap section">
+      <h2>3D component lab</h2>
+      <p class="muted">Drag to rotate. Scroll to zoom.</p>
+      <div id="model-buttons" class="model-buttons"></div>
+      <div id="viewer" class="viewer"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer wrap">
+    <p>ECE Hub. To add parts or roadmap steps, edit js/data.js.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
