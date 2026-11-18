@@ -1,110 +1,378 @@
-// ===== Edit this file to change the site's content. No other file needs to change. =====
+(() => {
+  "use strict";
 
-// Category name -> colour used for filter chips and component cards
-const CATEGORIES = {
-  "Passive": "#2563eb",
-  "Semiconductor": "#7c3aed",
-  "Display & opto": "#d97706",
-  "Analog IC": "#db2777",
-  "Digital IC": "#0d9488",
-  "Sensors": "#16a34a",
-  "Electromechanical": "#ea580c",
-  "Power": "#dc2626",
-  "Microcontroller": "#4f46e5"
-};
+  const $ = (id) => document.getElementById(id);
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// sym = short badge text, use = what it does, val = typical value or part number
-const PARTS = [
-  { name: "Resistor", sym: "R", cat: "Passive", use: "Limits current and divides voltage.", val: "1 Ω – 10 MΩ" },
-  { name: "Potentiometer", sym: "VR", cat: "Passive", use: "Adjustable resistor for volume and tuning controls.", val: "1 kΩ – 1 MΩ" },
-  { name: "Capacitor", sym: "C", cat: "Passive", use: "Stores charge. Filters noise and smooths supply rails.", val: "1 pF – 1000 µF" },
-  { name: "Inductor", sym: "L", cat: "Passive", use: "Stores energy in a magnetic field. Used in filters and converters.", val: "1 µH – 1 H" },
-  { name: "Crystal oscillator", sym: "X", cat: "Passive", use: "Gives a stable clock reference for digital circuits.", val: "8 MHz – 100 MHz" },
-  { name: "Transformer", sym: "T", cat: "Passive", use: "Steps AC voltage up or down through magnetic coupling.", val: "Turns ratio 1:1 to 10:1" },
+  /* ---------- Electronic components ---------- */
 
-  { name: "Diode", sym: "D", cat: "Semiconductor", use: "Conducts in one direction. Used in rectifiers.", val: "Si drop ≈ 0.7 V" },
-  { name: "Zener diode", sym: "DZ", cat: "Semiconductor", use: "Holds a fixed voltage in reverse breakdown.", val: "3.3 V, 5.1 V, 12 V" },
-  { name: "BJT (NPN)", sym: "Q", cat: "Semiconductor", use: "Current-controlled switch or amplifier.", val: "2N3904" },
-  { name: "MOSFET", sym: "M", cat: "Semiconductor", use: "Voltage-controlled switch. The core device in CMOS.", val: "IRF540, 2N7000" },
-  { name: "IGBT", sym: "IG", cat: "Semiconductor", use: "High-power switch for motor drives and inverters.", val: "IRG4PC40" },
-  { name: "SCR (thyristor)", sym: "SCR", cat: "Semiconductor", use: "Latching switch for controlling AC power.", val: "BT151" },
+  const grid = $("parts-grid");
+  const search = $("search");
+  const filters = $("filters");
+  const cats = ["All", ...Object.keys(CATEGORIES)];
+  let activeCat = "All";
 
-  { name: "LED", sym: "LED", cat: "Display & opto", use: "Emits light when forward-biased. Needs a series resistor.", val: "Red ≈ 2 V" },
-  { name: "7-segment display", sym: "7S", cat: "Display & opto", use: "Shows digits by lighting selected segments.", val: "Common cathode" },
-  { name: "16×2 LCD", sym: "LCD", cat: "Display & opto", use: "Character display for microcontroller projects.", val: "HD44780 controller" },
-  { name: "Optocoupler", sym: "OC", cat: "Display & opto", use: "Isolates two circuits using light.", val: "PC817" },
-
-  { name: "Op-amp", sym: "U", cat: "Analog IC", use: "High-gain amplifier for signal conditioning.", val: "LM358, µA741" },
-  { name: "555 timer", sym: "555", cat: "Analog IC", use: "Builds timers, oscillators, and PWM signals.", val: "NE555" },
-  { name: "Comparator", sym: "CMP", cat: "Analog IC", use: "Compares two voltages and outputs a digital level.", val: "LM393" },
-  { name: "Voltage regulator", sym: "REG", cat: "Analog IC", use: "Holds a steady output voltage despite input changes.", val: "7805 (5 V), LM317" },
-
-  { name: "Flip-flop", sym: "FF", cat: "Digital IC", use: "Stores one bit. The basis of registers and counters.", val: "7474, 74HC74" },
-  { name: "Shift register", sym: "SR", cat: "Digital IC", use: "Moves bits serially and adds extra output pins.", val: "74HC595" },
-  { name: "Multiplexer", sym: "MUX", cat: "Digital IC", use: "Selects one of several inputs to pass on.", val: "74HC153" },
-  { name: "Decoder", sym: "DEC", cat: "Digital IC", use: "Turns a binary code into one active output line.", val: "74HC138" },
-
-  { name: "Thermistor (NTC)", sym: "TH", cat: "Sensors", use: "Resistance falls as temperature rises.", val: "10 kΩ at 25 °C" },
-  { name: "LDR", sym: "LDR", cat: "Sensors", use: "Resistance falls as light intensity rises.", val: "Light-dependent resistor" },
-  { name: "Hall-effect sensor", sym: "HE", cat: "Sensors", use: "Detects magnetic fields, for example to measure speed.", val: "SS49E" },
-  { name: "Ultrasonic sensor", sym: "US", cat: "Sensors", use: "Measures distance using sound pulses.", val: "HC-SR04" },
-
-  { name: "Relay", sym: "RLY", cat: "Electromechanical", use: "Switches a high-power load with a low-power signal.", val: "5 V coil, SPDT" },
-  { name: "Push button", sym: "SW", cat: "Electromechanical", use: "Momentary switch for user input.", val: "Tactile, 4-pin" },
-  { name: "Buzzer", sym: "BZ", cat: "Electromechanical", use: "Turns an electrical signal into sound.", val: "Active, 5 V" },
-  { name: "Servo motor", sym: "SV", cat: "Electromechanical", use: "Rotates to a set angle using position feedback.", val: "SG90, 0–180°" },
-
-  { name: "Bridge rectifier", sym: "BR", cat: "Power", use: "Converts AC to pulsating DC using four diodes.", val: "KBP206" },
-  { name: "Fuse", sym: "F", cat: "Power", use: "Breaks the circuit when current gets too high.", val: "1 A to 20 A" },
-  { name: "Li-ion cell", sym: "BAT", cat: "Power", use: "Rechargeable source for portable electronics.", val: "3.7 V nominal" },
-
-  { name: "8051 MCU", sym: "51", cat: "Microcontroller", use: "Classic 8-bit microcontroller from embedded courses.", val: "AT89C51" },
-  { name: "ATmega328P", sym: "328", cat: "Microcontroller", use: "The chip inside the Arduino Uno.", val: "8-bit AVR, 16 MHz" },
-  { name: "Raspberry Pi Pico", sym: "PICO", cat: "Microcontroller", use: "Dual-core ARM board with PIO for custom protocols.", val: "RP2040" },
-  { name: "FPGA", sym: "FPGA", cat: "Microcontroller", use: "Reconfigurable chip for building custom digital hardware.", val: "Xilinx, Intel, Lattice" }
-];
-
-// Logic gates. n = number of inputs, fn = the gate's logic function.
-const GATES = [
-  { name: "AND", n: 2, expr: "Y = A · B", use: "Output is 1 only when every input is 1.", ex: "Example: a motor runs only when the key is on AND the button is pressed.", fn: (a, b) => a & b },
-  { name: "OR", n: 2, expr: "Y = A + B", use: "Output is 1 when at least one input is 1.", ex: "Example: an alarm sounds if the door OR the window is open.", fn: (a, b) => a | b },
-  { name: "NOT", n: 1, expr: "Y = A'", use: "Inverts its input: 0 becomes 1 and 1 becomes 0.", ex: "Example: turns an active-high signal into an active-low one.", fn: (a) => 1 - a },
-  { name: "NAND", n: 2, expr: "Y = (A · B)'", use: "Inverted AND. NAND gates alone can build every other gate.", ex: "Example: the basic building block of most memory chips.", fn: (a, b) => 1 - (a & b) },
-  { name: "NOR", n: 2, expr: "Y = (A + B)'", use: "Inverted OR. NOR gates alone can also build every other gate.", ex: "Example: used in control logic and some memory circuits.", fn: (a, b) => 1 - (a | b) },
-  { name: "XOR", n: 2, expr: "Y = A ⊕ B", use: "Output is 1 when the two inputs are different.", ex: "Example: the sum bit of a half adder.", fn: (a, b) => a ^ b },
-  { name: "XNOR", n: 2, expr: "Y = (A ⊕ B)'", use: "Output is 1 when the two inputs are the same.", ex: "Example: a simple equality comparator.", fn: (a, b) => 1 - (a ^ b) }
-];
-
-// VLSI roadmap. Each step has its own colour.
-const ROADMAP = [
-  {
-    title: "Digital logic", c: "#2563eb", sum: "How bits become circuits.",
-    topics: ["Boolean algebra and K-maps", "Gates, adders, and multiplexers", "Flip-flops, counters, and state machines"],
-    tools: "Logisim Evolution"
-  },
-  {
-    title: "Semiconductors and CMOS", c: "#7c3aed", sum: "The transistor that every chip is built from.",
-    topics: ["PN junctions and diodes", "MOS operation and threshold voltage", "CMOS inverter, NAND, and NOR", "Delay and power"],
-    tools: "LTspice"
-  },
-  {
-    title: "Hardware description language", c: "#db2777", sum: "Describe hardware in code.",
-    topics: ["Verilog or SystemVerilog", "RTL design and synchronous reset", "Testbenches and waveforms"],
-    tools: "Icarus Verilog, GTKWave"
-  },
-  {
-    title: "FPGA and synthesis", c: "#ea580c", sum: "Turn your code into working hardware.",
-    topics: ["Logic synthesis", "Timing constraints", "Place and route", "Testing on a real board"],
-    tools: "Yosys with nextpnr, or Vivado"
-  },
-  {
-    title: "ASIC design flow", c: "#16a34a", sum: "From RTL code to a chip layout.",
-    topics: ["Gate-level netlist", "Floorplanning, placement, and routing", "Clock tree synthesis", "Static timing, DRC, and LVS"],
-    tools: "OpenLane, OpenROAD, Magic, KLayout"
-  },
-  {
-    title: "Verification and test", c: "#0d9488", sum: "Prove the design works, then make it testable.",
-    topics: ["Coverage-driven verification", "UVM or cocotb testbenches", "Scan insertion and ATPG"],
-    tools: "Verilator, cocotb"
+  function renderFilters() {
+    filters.innerHTML = cats
+      .map((c) => `<button type="button" class="chip${c === activeCat ? " on" : ""}" data-cat="${c}" style="--c:${CATEGORIES[c] || "#18163a"}">${c}</button>`)
+      .join("");
   }
-];
+
+  filters.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    activeCat = btn.dataset.cat;
+    renderFilters();
+    renderParts();
+  });
+
+  function renderParts() {
+    const q = search.value.trim().toLowerCase();
+    const list = PARTS.filter((p) =>
+      (activeCat === "All" || p.cat === activeCat) &&
+      (p.name + " " + p.use).toLowerCase().includes(q)
+    );
+
+    grid.innerHTML = list.length
+      ? list.map((p, i) => `
+        <article class="part" style="--c:${CATEGORIES[p.cat]};--i:${i * 40}ms">
+          <span class="badge">${p.sym}</span>
+          <h3>${p.name}</h3>
+          <p>${p.use}</p>
+          <div class="meta"><span>${p.cat}</span><span class="val">${p.val}</span></div>
+        </article>`).join("")
+      : '<p class="muted">No parts match. Try a different word.</p>';
+  }
+
+  search.addEventListener("input", renderParts);
+
+  /* ---------- Logic gates ---------- */
+
+  const BUBBLE_GATES = ["NOT", "NAND", "NOR", "XNOR"];
+  const gateState = { a: 0, b: 0 };
+  let activeGate = 0;
+
+  // Gate symbol drawn as SVG. Wires light up green when the output is 1.
+  function gateSVG(g, y) {
+    const body = g.name === "NOT"
+      ? "M16 12V52L54 32Z"
+      : g.name.endsWith("AND")
+        ? "M16 12H34A20 20 0 0 1 34 52H16Z"
+        : "M16 12Q36 12 54 32Q36 52 16 52Q26 32 16 12Z";
+    const bubble = BUBBLE_GATES.includes(g.name);
+    const inputs = g.n === 2 ? [22, 42] : [32];
+    const extraCurve = g.name.startsWith("X") ? '<path d="M8 12Q28 32 8 52"/>' : "";
+
+    return `
+      <svg class="gate-svg" viewBox="0 0 80 64" aria-hidden="true">
+        ${inputs.map((iy) => `<line class="wire" x1="0" y1="${iy}" x2="18" y2="${iy}"/>`).join("")}
+        <path class="body" d="${body}"/>
+        ${extraCurve}
+        ${bubble ? '<circle class="bubble" cx="58" cy="32" r="4"/>' : ""}
+        <line class="wire out${y ? " on" : ""}" x1="${bubble ? 62 : 54}" y1="32" x2="80" y2="32"/>
+      </svg>`;
+  }
+
+  function renderGate() {
+    const g = GATES[activeGate];
+    const b = g.n === 2 ? gateState.b : 0;
+    const y = g.fn(gateState.a, b);
+
+    document.querySelectorAll("#gate-tabs .chip").forEach((el, i) =>
+      el.classList.toggle("on", i === activeGate)
+    );
+
+    const labels = g.n === 2 ? ["A", "B"] : ["A"];
+    $("inputs").innerHTML = labels
+      .map((k) => {
+        const key = k.toLowerCase();
+        return `<button type="button" class="in-btn${gateState[key] ? " on" : ""}" data-in="${key}" aria-label="Input ${k}">
+          <small>${k}</small>${gateState[key]}
+        </button>`;
+      })
+      .join("");
+
+    $("gate-svg").innerHTML = gateSVG(g, y);
+
+    const lamp = $("lamp");
+    lamp.textContent = `Y=${y}`;
+    lamp.classList.toggle("on", y === 1);
+
+    $("gate-name").textContent = `${g.name} gate`;
+    $("gate-expr").textContent = g.expr;
+    $("gate-use").textContent = g.use;
+    $("gate-ex").textContent = g.ex;
+
+    const rows = g.n === 2 ? [[0, 0], [0, 1], [1, 0], [1, 1]] : [[0], [1]];
+    $("truth-head").innerHTML = `<tr>${(g.n === 2 ? ["A", "B", "Y"] : ["A", "Y"]).map((h) => `<th>${h}</th>`).join("")}</tr>`;
+    $("truth-body").innerHTML = rows
+      .map((r) => {
+        const isCurrent = r[0] === gateState.a && (g.n === 1 || r[1] === gateState.b);
+        return `<tr class="${isCurrent ? "hit" : ""}">${r.map((v) => `<td>${v}</td>`).join("")}<td>${g.fn(...r)}</td></tr>`;
+      })
+      .join("");
+  }
+
+  function setupLogic() {
+    $("gate-tabs").innerHTML = GATES
+      .map((g, i) => `<button type="button" class="chip" data-i="${i}">${g.name}</button>`)
+      .join("");
+
+    $("gate-tabs").addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+      activeGate = Number(btn.dataset.i);
+      renderGate();
+    });
+
+    $("inputs").addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+      gateState[btn.dataset.in] ^= 1;
+      renderGate();
+    });
+
+    renderGate();
+  }
+
+  /* ---------- VLSI roadmap ---------- */
+
+  function renderRoadmap() {
+    $("timeline").innerHTML = ROADMAP.map((s, i) => `
+      <li class="step reveal" style="--c:${s.c};--d:${i * 0.12}s">
+        <span class="step-no">${i + 1}</span>
+        <div class="step-body">
+          <h3>${s.title}</h3>
+          <p class="muted">${s.sum}</p>
+          <ul>${s.topics.map((t) => `<li>${t}</li>`).join("")}</ul>
+          <p class="tline">Tools: ${s.tools}</p>
+        </div>
+      </li>`).join("");
+  }
+
+  /* ---------- 3D component lab (Three.js) ---------- */
+
+  const mat = (color, extra = {}) =>
+    new THREE.MeshStandardMaterial({ color, roughness: 0.4, metalness: 0.1, ...extra });
+
+  const cyl = (r, h, color) =>
+    new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 32), mat(color));
+
+  function resistor() {
+    const g = new THREE.Group();
+    const body = cyl(0.4, 2, 0xd9b382);
+    body.rotation.z = Math.PI / 2;
+    g.add(body);
+
+    // Colour bands for 1 kΩ ±5%: brown, black, red, gold
+    [0x7a3e14, 0x111111, 0xd62828, 0xd4af37].forEach((c, i) => {
+      const band = cyl(0.41, 0.16, c);
+      band.rotation.z = Math.PI / 2;
+      band.position.x = -0.6 + i * 0.4;
+      g.add(band);
+    });
+
+    [-1.75, 1.75].forEach((x) => {
+      const lead = cyl(0.05, 1.5, 0xc0c0c0);
+      lead.rotation.z = Math.PI / 2;
+      lead.position.x = x;
+      g.add(lead);
+    });
+    return g;
+  }
+
+  function capacitor() {
+    const g = new THREE.Group();
+    const disc = cyl(0.9, 0.35, 0xe0892b);
+    disc.position.y = 0.6;
+    g.add(disc);
+
+    [-0.3, 0.3].forEach((x) => {
+      const lead = cyl(0.04, 2, 0xc0c0c0);
+      lead.position.set(x, -0.4, 0);
+      g.add(lead);
+    });
+    return g;
+  }
+
+  function inductor() {
+    const g = new THREE.Group();
+    for (let i = 0; i < 8; i++) {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(0.45, 0.07, 12, 32),
+        mat(0xb87333, { metalness: 0.6, roughness: 0.3 })
+      );
+      ring.rotation.y = Math.PI / 2;
+      ring.position.x = -0.8 + i * 0.23;
+      g.add(ring);
+    }
+
+    [-1.2, 1.2].forEach((x) => {
+      const lead = cyl(0.04, 0.8, 0xc0c0c0);
+      lead.rotation.z = Math.PI / 2;
+      lead.position.x = x;
+      g.add(lead);
+    });
+    return g;
+  }
+
+  function led() {
+    const g = new THREE.Group();
+    const dome = new THREE.Mesh(
+      new THREE.SphereGeometry(0.7, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2),
+      mat(0xff4040, { transparent: true, opacity: 0.8, emissive: 0x551010 })
+    );
+    dome.position.y = 0.1;
+    g.add(dome, cyl(0.75, 0.2, 0xb22222));
+
+    // The anode (+) lead is the longer one
+    const anode = cyl(0.05, 2, 0xc0c0c0);
+    anode.position.set(0.2, -1.1, 0);
+    const cathode = cyl(0.05, 1.4, 0xc0c0c0);
+    cathode.position.set(-0.2, -0.8, 0);
+    g.add(anode, cathode);
+    return g;
+  }
+
+  function dipIC() {
+    const g = new THREE.Group();
+    g.add(new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.5, 2.4), mat(0x1d1f23, { roughness: 0.7 })));
+
+    // Notch that marks pin 1
+    const notch = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 12), mat(0xaaaaaa));
+    notch.position.set(-0.4, 0.27, -1.0);
+    g.add(notch);
+
+    const pinMat = mat(0xc0c0c0, { metalness: 0.8, roughness: 0.3 });
+    for (let i = 0; i < 4; i++) {
+      const z = -0.9 + i * 0.6;
+      [-0.6, 0.6].forEach((x) => {
+        const pin = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.7, 0.12), pinMat);
+        pin.position.set(x, -0.55, z);
+        g.add(pin);
+      });
+    }
+    return g;
+  }
+
+  function initViewer() {
+    const host = $("viewer");
+    const buttons = $("model-buttons");
+
+    if (typeof THREE === "undefined") {
+      host.innerHTML = '<p class="muted" style="padding:24px">The 3D viewer needs an internet connection to load Three.js.</p>';
+      return;
+    }
+
+    const models = { Resistor: resistor, Capacitor: capacitor, Inductor: inductor, LED: led, "DIP-8 IC": dipIC };
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+    camera.position.z = 6;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    host.appendChild(renderer.domElement);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    const key = new THREE.DirectionalLight(0xffffff, 0.9);
+    key.position.set(3, 4, 5);
+    const fill = new THREE.DirectionalLight(0xfbbf24, 0.4);
+    fill.position.set(-4, -2, -3);
+    scene.add(key, fill);
+
+    const pivot = new THREE.Group();
+    scene.add(pivot);
+    let current = null;
+
+    function show(name) {
+      if (current) pivot.remove(current);
+      current = models[name]();
+      pivot.add(current);
+      pivot.rotation.set(0.25, -0.6, 0);
+      camera.position.z = 6;
+      buttons.querySelectorAll(".chip").forEach((b) => b.classList.toggle("on", b.dataset.name === name));
+    }
+
+    buttons.innerHTML = Object.keys(models)
+      .map((name) => `<button type="button" class="chip" data-name="${name}">${name}</button>`)
+      .join("");
+    buttons.addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (btn) show(btn.dataset.name);
+    });
+
+    // Drag to rotate, scroll to zoom
+    const canvas = renderer.domElement;
+    let dragging = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    canvas.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      lastX = e.clientX;
+      lastY = e.clientY;
+      canvas.setPointerCapture(e.pointerId);
+    });
+    canvas.addEventListener("pointermove", (e) => {
+      if (!dragging) return;
+      pivot.rotation.y += (e.clientX - lastX) * 0.01;
+      pivot.rotation.x += (e.clientY - lastY) * 0.01;
+      lastX = e.clientX;
+      lastY = e.clientY;
+    });
+    ["pointerup", "pointercancel"].forEach((type) =>
+      canvas.addEventListener(type, () => { dragging = false; })
+    );
+    canvas.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      camera.position.z = THREE.MathUtils.clamp(camera.position.z + e.deltaY * 0.004, 3, 10);
+    }, { passive: false });
+
+    function resize() {
+      const w = host.clientWidth;
+      const h = host.clientHeight;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    (function animate() {
+      requestAnimationFrame(animate);
+      if (!dragging && !reduceMotion) pivot.rotation.y += 0.005;
+      renderer.render(scene, camera);
+    })();
+
+    show("Resistor");
+  }
+
+  /* ---------- Scroll reveal ---------- */
+
+  function revealOnScroll() {
+    const els = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window) || reduceMotion) {
+      els.forEach((el) => el.classList.add("in"));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach((el) => io.observe(el));
+  }
+
+  /* ---------- Start ---------- */
+
+  renderFilters();
+  renderParts();
+  setupLogic();
+  renderRoadmap();
+  initViewer();
+  revealOnScroll();
+})();
