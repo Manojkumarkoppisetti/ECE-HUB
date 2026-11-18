@@ -1,104 +1,470 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="te" data-lang="te" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=./ece-hub/ece-hub/">
-  <title>ECE HUB</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ECEVERSE – Explore. Learn. Experiment.</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600&family=Noto+Sans+Telugu:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#030817;--bg2:#0b1438;--glass:rgba(18,30,78,.55);--line:rgba(34,211,238,.35);--tx:#e6f7ff;--mu:#9fb3d9;--cy:#22d3ee;--bl:#3b82f6;--vi:#8b5cf6;--glow:0 0 18px rgba(34,211,238,.4);color-scheme:dark}
+:root[data-theme="light"]{--bg:#eef4ff;--bg2:#dde8ff;--glass:rgba(255,255,255,.72);--line:rgba(37,99,235,.35);--tx:#0b1433;--mu:#42557f;--cy:#0891b2;--bl:#2563eb;--vi:#7c3aed;--glow:0 0 14px rgba(37,99,235,.22);color-scheme:light}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{font-family:Inter,'Noto Sans Telugu',system-ui,sans-serif;background:var(--bg);color:var(--tx);line-height:1.6;overflow-x:hidden;min-height:100vh}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg2)}
+h1,h2,h3,.logo,.logo3d,.stat b{font-family:Orbitron,'Noto Sans Telugu',sans-serif}
+html[data-lang=te] .en,html[data-lang=en] .te{display:none}
+img,svg{max-width:100%}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+#ld{position:fixed;inset:0;z-index:99;display:grid;place-content:center;justify-items:center;gap:1rem;background:var(--bg);transition:opacity .6s,visibility .6s}
+#ld.h{opacity:0;visibility:hidden}
+.ring{width:70px;height:70px;border-radius:50%;border:3px solid transparent;border-top-color:var(--cy);border-right-color:var(--vi);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bg{position:fixed;inset:0;z-index:-2;background:var(--bg);overflow:hidden}
+.blob{position:absolute;width:45vmax;height:45vmax;border-radius:50%;filter:blur(70px);opacity:.25;animation:drift 18s ease-in-out infinite alternate}
+.b1{background:var(--vi);top:-15%;left:-10%}.b2{background:var(--cy);bottom:-20%;right:-10%;animation-delay:-6s}
+@keyframes drift{to{transform:translate(8vw,6vh) scale(1.1)}}
+.circ{position:absolute;inset:0;width:100%;height:100%}
+.circ path{fill:none;stroke:var(--cy);stroke-width:1.4;stroke-dasharray:14 12;opacity:.35;animation:flow 9s linear infinite}
+.circ circle{fill:var(--vi);opacity:.6}
+@keyframes flow{to{stroke-dashoffset:-260}}
+@media(max-width:700px){.blob{display:none}}
+.nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:.5rem;padding:calc(env(safe-area-inset-top,0px) + .6rem) 1rem .6rem;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.logo{font-weight:900;font-size:1.15rem;letter-spacing:.08em;text-decoration:none;background:linear-gradient(90deg,var(--cy),var(--vi));-webkit-background-clip:text;background-clip:text;color:transparent}
+#menu{display:flex;gap:1.1rem}
+#menu a{text-decoration:none;font-weight:600;font-size:.95rem;min-height:44px;display:flex;align-items:center;color:var(--mu)}
+#menu a:hover{color:var(--cy)}
+.ctl{display:flex;gap:.4rem}
+.ctl button{min-height:44px;min-width:44px;padding:0 .7rem;border-radius:12px;border:1px solid var(--line);background:transparent;cursor:pointer;font-weight:600}
+#burger{display:none}
+@media(max-width:860px){
+#burger{display:inline-flex;align-items:center;justify-content:center}
+#menu{position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:var(--bg2);border-bottom:1px solid var(--line);padding:.5rem 1rem;display:none}
+#menu.open{display:flex}}
+.hero{min-height:84vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.2rem;gap:1rem}
+.logo3d{font-weight:900;font-size:clamp(2.6rem,10vw,6rem);background:linear-gradient(90deg,var(--cy),var(--bl),var(--vi),var(--cy));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(var(--glow));animation:sheen 6s linear infinite;transition:transform .4s;transform-style:preserve-3d}
+.logo3d:hover{transform:perspective(600px) rotateY(14deg) rotateX(-6deg)}
+@keyframes sheen{to{background-position:200% center}}
+.sub{color:var(--mu);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:.85rem}
+.hero h1{font-size:clamp(1.3rem,4.6vw,2.6rem);line-height:1.3;max-width:900px}
+.lead{max-width:680px;color:var(--mu);margin:0 auto}
+.btns{display:flex;flex-wrap:wrap;gap:.8rem;justify-content:center;margin-top:.8rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:.8rem 1.3rem;border-radius:14px;text-decoration:none;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--bl),var(--vi));border:1px solid var(--cy);box-shadow:var(--glow);transition:transform .25s,box-shadow .25s;cursor:pointer}
+.btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 0 28px rgba(34,211,238,.6)}
+.btn.alt{background:transparent;color:var(--cy)}
+.glass{background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:18px;box-shadow:var(--glow)}
+.sec{max-width:1200px;margin:0 auto;padding:3.5rem 1.1rem}
+.sec>h2{font-size:clamp(1.4rem,4vw,2rem);margin-bottom:.4rem}
+.sec>.lead{margin:0 0 1.5rem}
+.showcase{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:2rem auto 0;max-width:900px}
+.showcase .glass{padding:1.2rem;text-align:center;transition:transform .4s}
+.showcase .glass:hover{transform:perspective(500px) rotateX(10deg) rotateY(-10deg) translateY(-4px)}
+.showcase svg{width:100%;height:60px;color:var(--cy);animation:pulse 3s ease-in-out infinite}
+@keyframes pulse{50%{filter:drop-shadow(0 0 8px var(--cy))}}
+.stats,.feat,.road,.ex-grid{display:grid;gap:14px}
+.stats{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+.feat{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:1.5rem}
+.feat a{padding:1.2rem;text-decoration:none;display:block;transition:transform .3s}
+.feat a:hover{transform:translateY(-5px)}
+.stat,.feat a{text-align:center}
+.stat{padding:1.2rem}
+.stat b{display:block;font-size:2rem;color:var(--cy)}
+.stat span,.feat span{color:var(--mu);font-size:.9rem}
+.tools{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:.9rem}
+.tools input,.tools select{min-height:48px;padding:.6rem .9rem;border-radius:14px;border:1px solid var(--line);background:var(--glass);flex:1 1 220px}
+.tools select{flex:0 1 200px}
+.chips{display:flex;gap:.5rem;overflow-x:auto;padding:.2rem 0 .8rem;scrollbar-width:none}
+.chip{flex:0 0 auto;min-height:44px;padding:.4rem .9rem;border-radius:999px;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:.9rem;white-space:nowrap}
+.chip.on{background:linear-gradient(135deg,var(--bl),var(--vi));color:#fff;border-color:transparent;box-shadow:var(--glow)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{padding:1.1rem;text-align:left;cursor:pointer;transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column;gap:.35rem;color:var(--tx)}
+.card:hover{transform:perspective(600px) rotateX(4deg) translateY(-5px);box-shadow:0 0 26px rgba(139,92,246,.45)}
+.card small{color:var(--cy);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.card b{font-size:1.02rem}
+.badge{align-self:flex-start;font-size:.75rem;padding:.15rem .6rem;border-radius:999px;border:1px solid var(--line);color:var(--mu)}
+.badge.on{border-color:var(--cy);color:var(--cy)}
+.empty{color:var(--mu);grid-column:1/-1;text-align:center;padding:2rem}
+dialog{width:min(780px,94vw);max-height:88vh;border:1px solid var(--cy);border-radius:20px;background:var(--bg2);color:var(--tx);padding:0;box-shadow:0 0 40px rgba(34,211,238,.35)}
+dialog::backdrop{background:rgba(2,6,20,.7)}
+.dwrap{padding:1.4rem;overflow:auto;max-height:88vh}
+.dwrap h3{font-size:1.2rem;margin-bottom:.6rem;padding-right:3rem}
+.dwrap h4{margin:1rem 0 .3rem;color:var(--cy);font-size:.95rem}
+.dwrap ul{padding-left:1.2rem}
+.x{position:absolute;top:.6rem;right:.6rem;min-width:44px;min-height:44px;border-radius:12px;border:1px solid var(--line);background:transparent;cursor:pointer;z-index:2}
+.sym{background:rgba(0,0,0,.2);border-radius:14px;padding:.6rem;color:var(--cy);max-width:240px;margin:.4rem auto}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;background:rgba(34,211,238,.08);border-left:3px solid var(--vi);padding:.5rem .8rem;border-radius:8px;overflow-x:auto}
+.exp{padding:1.3rem;margin-top:1.2rem;scroll-margin-top:90px}
+.exp h3{font-size:1.2rem;margin-bottom:.4rem}
+.tag{font-size:.72rem;padding:.15rem .55rem;border-radius:999px;border:1px solid var(--vi);color:var(--vi);font-family:Inter,sans-serif;margin-left:.4rem;vertical-align:middle}
+.ex-grid{grid-template-columns:1fr;gap:0}
+@media(min-width:900px){.ex-grid{grid-template-columns:1fr 1fr;gap:1rem}.exp{margin-top:0}}
+.ctrl label{display:block;margin:.6rem 0 .2rem;font-weight:600;font-size:.92rem}
+.ctrl input[type=range]{width:100%;accent-color:var(--cy);min-height:36px}
+.ctrl select{width:100%;min-height:44px;padding:.4rem .6rem;border-radius:12px;border:1px solid var(--line);background:var(--bg2)}
+.out{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.8rem}
+.out div{background:rgba(0,0,0,.2);border-radius:12px;padding:.6rem;text-align:center}
+.out b{display:block;font-size:1.15rem;color:var(--cy);font-family:Orbitron,sans-serif}
+.out span{font-size:.8rem;color:var(--mu)}
+.cir{width:100%;max-width:340px;display:block;margin:.6rem auto;color:var(--tx)}
+.warn{border:1px solid #f59e0b;color:#d97706;border-radius:12px;padding:.5rem .7rem;margin-top:.6rem;font-size:.9rem}
+[hidden]{display:none!important}
+details{margin-top:.6rem}
+summary{cursor:pointer;color:var(--cy);font-weight:600;min-height:44px;display:flex;align-items:center}
+.safe{border-left:3px solid #f59e0b;padding:.4rem .7rem;margin-top:.8rem;font-size:.9rem;color:var(--mu)}
+.road{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));list-style:none}
+.road li{padding:.9rem 1rem;display:grid;grid-template-columns:auto 1fr;gap:.2rem .7rem;align-items:center}
+.road b{font-size:1.1rem;color:var(--cy)}
+.about{display:flex;gap:1.2rem;align-items:center;flex-wrap:wrap;padding:1.4rem}
+.avatar{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-family:Orbitron,sans-serif;font-weight:900;background:linear-gradient(135deg,var(--cy),var(--vi));color:#fff;box-shadow:var(--glow);flex:0 0 auto}
+footer{text-align:center;color:var(--mu);font-size:.85rem;padding:2rem 1rem;border-top:1px solid var(--line)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.reveal{opacity:1!important;transform:none!important}}
+</style>
 </head>
 <body>
-  <p>Opening ECE HUB...</p>
-  <a href="./ece-hub/ece-hub/">Click here if not redirected</a>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECEVERSE – Explore. Learn. Experiment.</title>
-    <!-- Google Fonts & Tailwind CSS for fast, sleek styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .code-font { font-family: 'Fira Code', monospace; }
-    </style>
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
 
-    <!-- Navigation Bar -->
-    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-cyan-500 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-lg code-font">⚡ ECEVERSE</div>
-            </div>
-            <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-300">
-                <a href="#about" class="hover:text-cyan-400 transition">About</a>
-                <a href="#modules" class="hover:text-cyan-400 transition">Core Modules</a>
-                <a href="#tools" class="hover:text-cyan-400 transition">Simulators & Tools</a>
-                <a href="#contact" class="hover:text-cyan-400 transition">Connect</a>
-            </nav>
-            <div>
-                <a href="#modules" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold px-4 py-2 rounded-lg text-sm transition">Get Started</a>
-            </div>
-        </div>
-    </header>
+<div id="ld"><div class="ring"></div><div class="logo">ECEVERSE</div><small class="te">లోడ్ అవుతోంది…</small><small class="en">Loading the lab…</small></div>
 
-    <!-- Hero Section -->
-    <section class="flex-grow flex items-center justify-center text-center px-4 py-20 bg-gradient-to-b from-slate-900 to-slate-950">
-        <div class="max-w-3xl mx-auto">
-            <span class="inline-block bg-cyan-500/10 text-cyan-400 text-xs font-semibold px-3 py-1 rounded-full border border-cyan-500/20 mb-6 code-font">
-                // Explore. Learn. Experiment.
-            </span>
-            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6">
-                The Ultimate Hub for <span class="text-cyan-400">Electronics & Communication</span> Engineering
-            </h1>
-            <p class="text-lg text-slate-400 mb-10 max-w-2xl mx-auto">
-                Dive deep into digital logic, semiconductor devices, VLSI fundamentals, signal processing, and hardware design concepts all in one place.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#modules" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold px-8 py-3 rounded-xl transition shadow-lg shadow-cyan-500/20">Explore Modules</a>
-                <a href="#tools" class="bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 font-semibold px-8 py-3 rounded-xl transition">View Resources</a>
-            </div>
-        </div>
-    </section>
+<div class="bg" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div>
+<svg class="circ" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+<path d="M0 120H300V260H520V120H760V300H1200"/><path d="M0 500H180V380H420V560H700V420H960V640H1200"/><path d="M200 800V640H460V700H640V800"/><path d="M900 0V180H1040V420H1200"/>
+<circle cx="300" cy="260" r="5"/><circle cx="700" cy="420" r="5"/><circle cx="1040" cy="420" r="5"/><circle cx="460" cy="640" r="5"/>
+</svg></div>
 
-    <!-- Core Modules Section -->
-    <section id="modules" class="py-20 bg-slate-900/30 border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-white mb-3">Core Engineering Domains</h2>
-                <p class="text-slate-400">Essential subjects and modules tailored for modern hardware engineers.</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Card 1 -->
-                <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl hover:border-cyan-500/50 transition group">
-                    <div class="w-12 h-12 bg-cyan-500/10 text-cyan-400 rounded-xl flex items-center justify-center font-bold text-xl mb-6 group-hover:scale-110 transition">🔌</div>
-                    <h3 class="text-xl font-semibold text-white mb-3">Electronic Devices & Circuits</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Understand semiconductor physics, diode characteristics, BJT/MOSFET biasing, and amplifier frequency responses.</p>
-                </div>
-                <!-- Card 2 -->
-                <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl hover:border-cyan-500/50 transition group">
-                    <div class="w-12 h-12 bg-cyan-500/10 text-cyan-400 rounded-xl flex items-center justify-center font-bold text-xl mb-6 group-hover:scale-110 transition">🔲</div>
-                    <h3 class="text-xl font-semibold text-white mb-3">Switching Theory & Logic</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Master Boolean algebra, combinational circuits, sequential flip-flops, state machines, and FPGA design bases.</p>
-                </div>
-                <!-- Card 3 -->
-                <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl hover:border-cyan-500/50 transition group">
-                    <div class="w-12 h-12 bg-cyan-500/10 text-cyan-400 rounded-xl flex items-center justify-center font-bold text-xl mb-6 group-hover:scale-110 transition">📈</div>
-                    <h3 class="text-xl font-semibold text-white mb-3">Signals & Systems</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed">Analyze continuous and discrete-time signals, Fourier transforms, LTI systems, and probability random processes.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<header class="nav">
+<a class="logo" href="#home">ECEVERSE</a>
+<nav id="menu">
+<a href="#components"><span class="te">భాగాలు</span><span class="en">Components</span></a>
+<a href="#lab"><span class="te">ప్రయోగాలు</span><span class="en">Experiments</span></a>
+<a href="#roadmap"><span class="te">VLSI రోడ్‌మ్యాప్</span><span class="en">VLSI Roadmap</span></a>
+<a href="#about"><span class="te">గురించి</span><span class="en">About</span></a>
+</nav>
+<div class="ctl">
+<button id="lang" aria-label="Switch language">English</button>
+<button id="theme" aria-label="Toggle theme">🌙</button>
+<button id="burger" aria-label="Open menu">☰</button>
+</div>
+</header>
 
-    <!-- Footer -->
-    <footer class="bg-slate-950 border-t border-slate-800 py-8 text-center text-sm text-slate-500">
-        <p>&copy; 2026 ECEVERSE. Built with passion for Engineering & Hardware Design.</p>
-    </footer>
+<section id="home" class="hero">
+<div class="logo3d">ECEVERSE</div>
+<p class="sub">Explore. Learn. Experiment.</p>
+<h1 class="te">Electronics నేర్చుకోండి. Experiments చేయండి. మీ Skills పెంచుకోండి.</h1>
+<h1 class="en">Learn Electronics. Run Experiments. Grow Your Skills.</h1>
+<p class="lead te">డిప్లొమా ECE, B.Tech ECE మరియు ఎలక్ట్రానిక్స్ ఆసక్తి గలవారి కోసం ఒక భవిష్యత్ ఎలక్ట్రానిక్స్ లెర్నింగ్ ప్లాట్‌ఫామ్.</p>
+<p class="lead en">A futuristic electronics learning universe for Diploma ECE, B.Tech ECE and enthusiasts.</p>
+<div class="btns">
+<a class="btn" href="#components"><span class="te">భాగాలను అన్వేషించండి</span><span class="en">Explore Components</span></a>
+<a class="btn alt" href="#lab"><span class="te">వర్చువల్ ల్యాబ్‌లోకి</span><span class="en">Enter Virtual Lab</span></a>
+</div>
+<div class="showcase" id="showcase"></div>
+</section>
 
+<section class="sec reveal">
+<div class="stats">
+<div class="glass stat"><b>14</b><span class="te">భాగాల వర్గాలు</span><span class="en">Component categories</span></div>
+<div class="glass stat"><b>13</b><span class="te">VLSI రోడ్‌మ్యాప్ దశలు</span><span class="en">VLSI roadmap stages</span></div>
+<div class="glass stat"><b>2</b><span class="te">ఇంటరాక్టివ్ ప్రయోగాలు</span><span class="en">Interactive experiments</span></div>
+<div class="glass stat"><b>3</b><span class="te">వివరణాత్మక భాగాల గైడ్లు</span><span class="en">Detailed component guides</span></div>
+</div>
+<div class="feat">
+<a class="glass" href="#ohm"><b>Ohm's Law</b><br><span class="te">ఓమ్స్ లా ప్రయోగం</span><span class="en">Simplified simulation</span></a>
+<a class="glass" href="#led"><b>LED Circuit</b><br><span class="te">LED సిరీస్ రెసిస్టర్</span><span class="en">Series resistor calculator</span></a>
+<a class="glass" href="#roadmap"><b>VLSI</b><br><span class="te">13 దశల రోడ్‌మ్యాప్</span><span class="en">13-stage roadmap</span></a>
+</div>
+</section>
+
+<section id="components" class="sec reveal">
+<h2><span class="te">ఎలక్ట్రానిక్ భాగాల లైబ్రరీ</span><span class="en">Electronic Components Library</span></h2>
+<p class="lead"><span class="te">పేరు లేదా వర్గం ద్వారా వెతకండి. ప్రతి భాగంపై క్లిక్ చేసి వివరాలు చూడండి.</span><span class="en">Search by name or category. Click any component for details.</span></p>
+<div class="tools">
+<input id="q" type="search" placeholder="Search · వెతకండి" aria-label="Search components">
+<select id="sort" aria-label="Sort">
+<option value="name">A–Z · పేరు</option>
+<option value="cat">Category · వర్గం</option>
+<option value="det">Detailed first · వివరణాత్మకం ముందు</option>
+</select>
+</div>
+<div class="chips" id="chips"></div>
+<div class="grid" id="grid"></div>
+</section>
+
+<section id="lab" class="sec reveal">
+<h2><span class="te">వర్చువల్ ఎలక్ట్రానిక్స్ ల్యాబ్</span><span class="en">Virtual Electronics Lab</span></h2>
+<p class="lead"><span class="te">ఇవి సరళీకృత విద్యా ప్రయోగాలు (simplified educational simulations). డ్రాగ్-అండ్-డ్రాప్ బ్రెడ్‌బోర్డ్ తర్వాత వస్తుంది.</span><span class="en">These are simplified educational simulations. The drag-and-drop breadboard comes later.</span></p>
+
+<div class="ex-grid">
+<article id="ohm" class="glass exp">
+<h3><span class="te">ఓమ్స్ లా (Ohm's Law)</span><span class="en">Ohm's Law</span><span class="tag">Simplified simulation</span></h3>
+<p><b class="te">లక్ష్యం: </b><span class="te">V మరియు R మారినప్పుడు I ఎలా మారుతుందో గమనించడం.</span><span class="en">Aim: observe how current I changes with V and R.</span></p>
+<p class="ctrl">
+<label><span class="te">వోల్టేజ్ V</span><span class="en">Voltage V</span>: <b id="ovv">6.0</b> V</label>
+<input id="ov" type="range" min="0" max="12" step="0.5" value="6">
+<label><span class="te">రెసిస్టెన్స్ R</span><span class="en">Resistance R</span>: <b id="orv">1000</b> Ω</label>
+<input id="or" type="range" min="10" max="10000" step="10" value="1000">
+</p>
+<svg class="cir" viewBox="0 0 300 150" aria-hidden="true">
+<rect x="40" y="30" width="220" height="90" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
+<rect x="120" y="22" width="60" height="18" style="fill:var(--bg2);stroke:var(--cy)"/>
+<text x="150" y="35" text-anchor="middle" fill="currentColor" font-size="12">R</text>
+<text x="32" y="78" text-anchor="end" fill="currentColor" font-size="13">+V −</text>
+<text id="oiL" x="150" y="142" text-anchor="middle" style="fill:var(--cy)" font-size="13">I</text>
+</svg>
+<div class="out">
+<div><b id="oi">0</b><span>I (mA) · కరెంట్</span></div>
+<div><b id="op">0</b><span>P (mW) · శక్తి</span></div>
+</div>
+<p id="ow" class="warn" hidden><span class="te">⚠ శక్తి 0.25 W దాటింది — రెసిస్టర్ పవర్ రేటింగ్ మించవచ్చు.</span><span class="en">⚠ Power above 0.25 W — the resistor may exceed its power rating.</span></p>
+<p class="formula" style="margin-top:.8rem">I = V / R &nbsp;|&nbsp; P = V × I</p>
+<details><summary><span class="te">విధానం (Procedure)</span><span class="en">Procedure</span></summary>
+<ol style="padding-left:1.2rem;margin-top:.4rem">
+<li><span class="te">V ను 0 నుండి 12 V వరకు నెమ్మదిగా పెంచండి; ప్రతిసారి అమ్మీటర్ రీడింగ్ నమోదు చేయండి.</span><span class="en">Raise V from 0 to 12 V; note the ammeter reading each time.</span></li>
+<li><span class="te">R ను మార్చి మళ్లీ చేయండి. V vs I గ్రాఫ్ గీయండి — సరళ రేఖ వస్తే ఓమ్స్ లా నిజం.</span><span class="en">Change R and repeat. Plot V vs I — a straight line confirms Ohm's law.</span></li>
+</ol></details>
+<details><summary><span class="te">ప్రశ్నలు (Viva)</span><span class="en">Viva questions</span></summary>
+<p style="margin-top:.4rem"><span class="te">Q: R పెరిగితే I ఏమవుతుంది? A: I తగ్గుతుంది.</span><span class="en">Q: If R increases, what happens to I? A: It decreases.</span></p>
+<p style="margin-top:.4rem"><span class="te">Q: ఓమ్స్ లా ఏ పరిస్థితుల్లో వర్తించదు? A: డయోడ్ వంటి నాన్-లీనియర్ భాగాలు, ఎక్కువ ఉష్ణోగ్రత మార్పులు.</span><span class="en">Q: When does Ohm's law not hold? A: Non-linear parts like diodes, large temperature changes.</span></p>
+</details>
+<p class="safe"><span class="te">భద్రత: 12 V DC కంటే ఎక్కువ వాడకండి. పోలారిటీ సరిచూడండి. నిజమైన హార్డ్‌వేర్‌లో రెసిస్టర్ వేడెక్కితే వెంటనే ఆపండి.</span><span class="en">Safety: use 12 V DC or less, check polarity, and stop if the resistor gets hot on real hardware.</span></p>
+</article>
+
+<article id="led" class="glass exp">
+<h3><span class="te">LED సిరీస్ రెసిస్టర్</span><span class="en">LED Series Resistor</span><span class="tag">Simplified simulation</span></h3>
+<p><span class="te">లక్ష్యం: LED కి సరైన కరెంట్-లిమిటింగ్ రెసిస్టర్ లెక్కించడం.</span><span class="en">Aim: calculate the correct current-limiting resistor for an LED.</span></p>
+<p class="ctrl">
+<label><span class="te">సప్లై వోల్టేజ్ Vs</span><span class="en">Supply Vs</span>: <b id="lvv">5.0</b> V</label>
+<input id="lv" type="range" min="3" max="12" step="0.5" value="5">
+<label><span class="te">LED రంగు (typical Vf)</span><span class="en">LED colour (typical Vf)</span></label>
+<select id="lc">
+<option value="1.8">ఎరుపు / Red (~1.8 V)</option>
+<option value="2.0" selected>పసుపు–ఆకుపచ్చ / Yellow–Green (~2.0 V)</option>
+<option value="3.2">నీలం / Blue–White (~3.2 V)</option>
+</select>
+<label><span class="te">కరెంట్ If</span><span class="en">Current If</span></label>
+<select id="li">
+<option value="5">5 mA</option>
+<option value="10" selected>10 mA</option>
+<option value="15">15 mA</option>
+<option value="20">20 mA</option>
+</select>
+</p>
+<div class="out">
+<div><b id="lr">—</b><span>R (Ω) · గణించిన విలువ</span></div>
+<div><b id="le">—</b><span>E12 సమీప విలువ</span></div>
+</div>
+<div class="out" style="grid-template-columns:1fr">
+<div><b id="lp">—</b><span>Resistor power (mW)</span></div>
+</div>
+<p id="lw" class="warn" hidden><span class="te">⚠ Vs, Vf కంటే ఎక్కువగా ఉండాలి.</span><span class="en">⚠ Vs must be greater than Vf.</span></p>
+<p class="formula" style="margin-top:.8rem">R = (Vs − Vf) / If &nbsp;|&nbsp; P = (Vs − Vf) × If</p>
+<details><summary><span class="te">విధానం (Procedure)</span><span class="en">Procedure</span></summary>
+<ol style="padding-left:1.2rem;margin-top:.4rem">
+<li><span class="te">Vs, LED రంగు (Vf) మరియు If ఎంచుకోండి.</span><span class="en">Pick Vs, the LED colour (Vf) and If.</span></li>
+<li><span class="te">R లెక్కించి, సమీప ప్రామాణిక విలువ (E12) ఎంచుకోండి.</span><span class="en">Calculate R and choose the nearest standard value (E12).</span></li>
+<li><span class="te">బ్రెడ్‌బోర్డ్‌లో కట్టండి: సప్లై + → రెసిస్టర్ → LED పొడవైన లీడ్ (Anode) → LED పొట్టి లీడ్ (Cathode) → సప్లై −.</span><span class="en">Wire it: supply + → resistor → LED anode (long lead) → LED cathode (short lead) → supply −.</span></li>
+</ol></details>
+<details><summary><span class="te">ప్రశ్నలు (Viva)</span><span class="en">Viva questions</span></summary>
+<p style="margin-top:.4rem"><span class="te">Q: రెసిస్టర్ లేకుండా LED ను నేరుగా సప్లైకి కలిపితే ఏమవుతుంది? A: కరెంట్ ఎక్కువై LED దెబ్బతినవచ్చు.</span><span class="en">Q: What if the LED is connected directly to supply? A: Current can rise high enough to damage it.</span></p>
+</details>
+<p class="safe"><span class="te">భద్రత: LED ను రెసిస్టర్ లేకుండా బ్యాటరీకి నేరుగా కలపకండి.</span><span class="en">Safety: never connect an LED directly to a battery without a resistor.</span></p>
+</article>
+</div>
+</section>
+
+<section id="roadmap" class="sec reveal">
+<h2><span class="te">VLSI లెర్నింగ్ రోడ్‌మ్యాప్</span><span class="en">VLSI Learning Roadmap</span></h2>
+<p class="lead"><span class="te">13 దశలు. ప్రతి దశ యొక్క ప్రీరిక్విజిట్స్ మరియు వనరులు తర్వాతి నవీకరణలో జోడించబడతాయి.</span><span class="en">13 stages. Prerequisites and resources for each stage will be added in the next update.</span></p>
+<ol class="road" id="road"></ol>
+</section>
+
+<section id="about" class="sec reveal">
+<div class="glass about">
+<div class="avatar">MK</div>
+<div>
+<h2 style="font-size:1.3rem"><span class="te">సృష్టికర్త: Manoj Kumar</span><span class="en">Created by Manoj Kumar</span></h2>
+<p class="lead" style="margin:.3rem 0 0"><span class="te">ECEVERSE ను డిప్లొమా మరియు B.Tech ECE విద్యార్థుల కోసం, సరళమైన తెలుగు వివరణలతో రూపొందించారు.</span><span class="en">ECEVERSE was created for Diploma and B.Tech ECE students, with simple Telugu explanations.</span></p>
+</div>
+</div>
+</section>
+
+<footer>
+<p>© ECEVERSE · Created by Manoj Kumar</p>
+<p><span class="te">అన్ని విలువలు విద్యా ప్రయోజనం కోసం (typical). ఖచ్చితమైన విలువలకు మరియు గరిష్ట రేటింగ్‌లకు datasheet చూడండి.</span><span class="en">All values are for learning (typical). Check the datasheet for exact values and maximum ratings.</span></p>
+</footer>
+
+<dialog id="dlg">
+<button class="x" onclick="dlg.close()" aria-label="Close">✕</button>
+<div class="dwrap" id="dbody"></div>
+</dialog>
+
+<script>
+const $=s=>document.querySelector(s);
+let L='te',cat='all',cur=null;
+const CATS={res:{te:'నిరోధకాలు',en:'Resistors'},cap:{te:'కెపాసిటర్లు',en:'Capacitors'},ind:{te:'ఇండక్టర్లు',en:'Inductors'},dio:{te:'డయోడ్లు',en:'Diodes'},led:{te:'LEDలు',en:'LEDs'},bjt:{te:'BJT ట్రాన్సిస్టర్లు',en:'BJT Transistors'},mos:{te:'MOSFETలు',en:'MOSFETs'},ic:{te:'ఇంటిగ్రేటెడ్ సర్క్యూట్లు',en:'Integrated Circuits'},sen:{te:'సెన్సర్లు',en:'Sensors'},mcu:{te:'మైక్రోకంట్రోలర్లు',en:'Microcontrollers'},trf:{te:'ట్రాన్స్‌ఫార్మర్లు',en:'Transformers'},rly:{te:'రిలేలు',en:'Relays'},con:{te:'కనెక్టర్లు',en:'Connectors'},com:{te:'కమ్యూనికేషన్ భాగాలు',en:'Communication'}};
+const COMP=[
+{id:'res',cat:'res',n:{te:'రెసిస్టర్ (Resistor)',en:'Resistor'},full:1},
+{id:'cap',cat:'cap',n:{te:'కెపాసిటర్ (Capacitor)',en:'Capacitor'},full:1},
+{id:'led',cat:'led',n:{te:'LED (కాంతి ఉద్గార డయోడ్)',en:'LED (Light Emitting Diode)'},full:1},
+{id:'ind',cat:'ind',n:{te:'ఇండక్టర్ (Inductor)',en:'Inductor'}},
+{id:'dio',cat:'dio',n:{te:'డయోడ్ (Diode)',en:'Diode'}},
+{id:'bjt',cat:'bjt',n:{te:'BJT ట్రాన్సిస్టర్',en:'BJT Transistor'}},
+{id:'mos',cat:'mos',n:{te:'MOSFET',en:'MOSFET'}},
+{id:'ic',cat:'ic',n:{te:'ఇంటిగ్రేటెడ్ సర్క్యూట్ (IC)',en:'Integrated Circuit (IC)'}},
+{id:'sen',cat:'sen',n:{te:'సెన్సర్ (Sensor)',en:'Sensor'}},
+{id:'mcu',cat:'mcu',n:{te:'మైక్రోకంట్రోలర్ (Microcontroller)',en:'Microcontroller'}},
+{id:'trf',cat:'trf',n:{te:'ట్రాన్స్‌ఫార్మర్ (Transformer)',en:'Transformer'}},
+{id:'rly',cat:'rly',n:{te:'రిలే (Relay)',en:'Relay'}},
+{id:'con',cat:'con',n:{te:'కనెక్టర్ (Connector)',en:'Connector'}},
+{id:'com',cat:'com',n:{te:'కమ్యూనికేషన్ మాడ్యూల్',en:'Communication module'}}
+];
+const SYM={
+res:'<svg viewBox="0 0 120 40" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M0 20H25L32 8L42 32L52 8L62 32L72 8L82 32L89 20H120"/></svg>',
+cap:'<svg viewBox="0 0 120 40" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M0 20H52M52 6V34M68 6V34M68 20H120"/></svg>',
+led:'<svg viewBox="0 -6 120 48" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M0 20H46M74 20H120M46 8V32L74 20ZM74 8V32"/><path style="stroke:var(--vi)" d="M84 2L96 -6M90 10L102 2"/></svg>'
+};
+const H={sym:{te:'ఎలక్ట్రానిక్ సింబల్',en:'Electronic symbol'},def:{te:'నిర్వచనం (Definition)',en:'Definition'},work:{te:'పనిచేసే విధానం (Working principle)',en:'Working principle'},vals:{te:'ముఖ్య విలువలు (Typical values)',en:'Important values (typical)'},f:{te:'సూత్రాలు (Formulas & units)',en:'Formulas & units'},pins:{te:'పిన్ కాన్ఫిగరేషన్ (Pins)',en:'Pin configuration'},apps:{te:'అనువర్తనాలు (Applications)',en:'Applications'},adv:{te:'ప్రయోజనాలు (Advantages)',en:'Advantages'},lim:{te:'పరిమితులు (Limitations)',en:'Limitations'},ds:{te:'Datasheet సూచన',en:'Datasheet reference'},exp:{te:'సంబంధిత ప్రయోగం',en:'Related experiment'}};
+const EXP={ohm:{te:'ఓమ్స్ లా ప్రయోగం',en:"Ohm's Law experiment"},ledc:{te:'LED సిరీస్ రెసిస్టర్ ప్రయోగం',en:'LED series resistor experiment'}};
+const DET={
+res:{sym:'res',def:{te:'రెసిస్టర్ అనేది విద్యుత్ ప్రవాహానికి నిరోధం (Resistance) కలిగించే నిష్క్రియ (Passive) భాగం. ప్రవాహాన్ని నియంత్రించడానికి మరియు వోల్టేజ్‌ను విభజించడానికి ఉపయోగిస్తారు.',en:'A passive component that opposes current flow through its resistance. Used to limit current and divide voltage.'},
+work:{te:'ఓమ్స్ లా ప్రకారం, రెసిస్టర్ రెండు చివరల మధ్య వోల్టేజ్ (V) పెరిగితే ప్రవాహం (I) పెరుగుతుంది. శక్తి (Power) వేడి (Heat) రూపంలో వెదజల్లుతుంది.',en:"By Ohm's law, current rises with voltage across the resistor. Power is dissipated as heat."},
+vals:{te:['విలువ: సాధారణంగా 1 Ω నుండి 10 MΩ (typical)','పవర్ రేటింగ్: ¼ W, ½ W (typical)','టాలరెన్స్: ±1%, ±5%, ±10% (typical)'],en:['Value: commonly 1 Ω to 10 MΩ (typical)','Power rating: ¼ W, ½ W (typical)','Tolerance: ±1%, ±5%, ±10% (typical)']},
+f:'V = I × R &nbsp;|&nbsp; P = V × I = I² × R &nbsp;(V volt, I ampere, R ohm, P watt)',
+pins:{te:'రెండు టెర్మినల్స్; ధ్రువత (polarity) లేదు (non-polar).',en:'Two terminals; non-polar.'},
+apps:{te:['LED కోసం కరెంట్ లిమిటింగ్','వోల్టేజ్ డివైడర్','పుల్-అప్ / పుల్-డౌన్ రెసిస్టర్లు'],en:['Current limiting for LEDs','Voltage dividers','Pull-up / pull-down resistors']},
+adv:{te:['సరళమైనది, చౌకైనది, ధ్రువత లేదు'],en:['Simple, cheap, non-polar']},
+lim:{te:['పవర్ రేటింగ్ మించితే వేడెక్కుతుంది','విలువ ఉష్ణోగ్రతతో కొద్దిగా మారుతుంది'],en:['Overheats if its power rating is exceeded','Value drifts slightly with temperature']},
+ds:{te:'Datasheet లో tolerance, power rating మరియు maximum ratings చూడండి. గరిష్ట రేటింగ్‌లను ఎప్పుడూ మించకూడదు.',en:'Check tolerance, power rating and maximum ratings in the datasheet. Never exceed maximum ratings.'},
+exp:'ohm'},
+cap:{sym:'cap',def:{te:'కెపాసిటర్ విద్యుత్ ఛార్జ్‌ను విద్యుత్ క్షేత్రం (Electric field) రూపంలో నిల్వ చేస్తుంది. ఇది రెండు వాహక ప్లేట్‌ల (Conductor plates) మధ్య అవాహకం (Dielectric) ఉంచి తయారవుతుంది.',en:'Stores electric charge as an electric field. Made of two conductor plates separated by a dielectric.'},
+work:{te:'DC వోల్టేజ్ వర్తించినప్పుడు ప్లేట్‌లపై ఛార్జ్ పేరుకుంటుంది. ఛార్జ్ నిండిన తర్వాత DC లో ఇది ఓపెన్ సర్క్యూట్‌లా ప్రవర్తిస్తుంది; AC లో ప్రవాహం కొనసాగుతుంది.',en:'When DC voltage is applied, charge builds on the plates. Once charged, it acts as an open circuit for DC; AC keeps flowing.'},
+vals:{te:['కెపాసిటెన్స్: pF నుండి mF వరకు (typical)','వోల్టేజ్ రేటింగ్ సర్క్యూట్ వోల్టేజ్ కంటే ఎక్కువ ఉండాలి','ఎలక్ట్రోలైటిక్ రకానికి + / − ధ్రువత ఉంటుంది'],en:['Capacitance: pF to mF (typical)','Voltage rating must exceed the circuit voltage','Electrolytic types are polarised (+ / −)']},
+f:'Q = C × V &nbsp;|&nbsp; I = C × dV/dt &nbsp;|&nbsp; E = ½ × C × V² &nbsp;|&nbsp; τ = R × C &nbsp;(C farad, τ second)',
+pins:{te:'రెండు లీడ్స్; ఎలక్ట్రోలైటిక్ రకంలో + లీడ్ మరియు − గుర్తు ఉంటుంది.',en:'Two leads; electrolytic types have a marked + lead and a − side.'},
+apps:{te:['ఫిల్టరింగ్ (Filtering)','డీకప్లింగ్ (Decoupling)','RC టైమింగ్ సర్క్యూట్లు'],en:['Filtering','Decoupling','RC timing circuits']},
+adv:{te:['శక్తిని నిల్వ చేస్తుంది; ఫిల్టరింగ్‌కు ఉపయోగకరం'],en:['Stores energy; useful for filtering']},
+lim:{te:['లీకేజ్ కరెంట్ ఉంటుంది','ఎలక్ట్రోలైటిక్‌కు సరైన ధ్రువత తప్పనిసరి','వోల్టేజ్ రేటింగ్ పరిమితం'],en:['Leakage current exists','Electrolytics need correct polarity','Limited voltage rating']},
+ds:{te:'Datasheet లో capacitance tolerance, voltage rating మరియు ESR చూడండి.',en:'Check capacitance tolerance, voltage rating and ESR in the datasheet.'},
+exp:null},
+led:{sym:'led',def:{te:'LED (కాంతి ఉద్గార డయోడ్) అనేది ఫార్వర్డ్ బయాస్‌లో కాంతిని విడుదల చేసే సెమీకండక్టర్ డయోడ్.',en:'A Light Emitting Diode is a semiconductor diode that emits light when forward biased.'},
+work:{te:'PN జంక్షన్‌లో ఎలక్ట్రాన్లు మరియు హోల్స్ కలిసినప్పుడు శక్తి కాంతి (Photon) రూపంలో విడుదలవుతుంది. ఇది ఒకే దిశలో మాత్రమే ప్రవహిస్తుంది.',en:'When electrons and holes recombine at the PN junction, energy is released as light (photons). Current flows one way only.'},
+vals:{te:['ఫార్వర్డ్ వోల్టేజ్ Vf: రంగును బట్టి సుమారు 1.8–3.3 V (typical)','సాధారణ ఇండికేటర్ LED కరెంట్: 10–20 mA (typical)','ఖచ్చితమైన విలువలకు datasheet చూడండి'],en:['Forward voltage Vf: about 1.8–3.3 V depending on colour (typical)','Standard indicator LED current: 10–20 mA (typical)','Check the datasheet for exact values']},
+f:'R = (Vs − Vf) / If &nbsp;|&nbsp; P_R = (Vs − Vf) × If &nbsp;(Vs, Vf volt; If ampere)',
+pins:{te:'Anode (+) — పొడవైన లీడ్; Cathode (−) — పొట్టి లీడ్ లేదా ఫ్లాట్ అంచు.',en:'Anode (+) — longer lead; Cathode (−) — shorter lead or flat edge.'},
+apps:{te:['ఇండికేటర్ లైట్లు','డిస్‌ప్లేలు','బ్యాక్‌లైటింగ్'],en:['Indicator lights','Displays','Backlighting']},
+adv:{te:['తక్కువ విద్యుత్ వినియోగం; ఎక్కువ జీవితకాలం'],en:['Low power use; long life']},
+lim:{te:['కరెంట్ లిమిటింగ్ రెసిస్టర్ తప్పనిసరి','ధ్రువత (polarity) ముఖ్యం'],en:['A current-limiting resistor is essential','Polarity matters']},
+ds:{te:'Datasheet లో Vf, గరిష్ట forward current మరియు reverse voltage (maximum ratings) చూడండి.',en:'Check Vf, maximum forward current and reverse voltage (maximum ratings) in the datasheet.'},
+exp:'ledc'}
+};
+const H_ = H;
+const sec=(k,b)=>`<h4>${H[k][L]}</h4>${b}`;
+const ul=a=>`<ul>${a.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+const dlg=$('#dlg');
+
+function show(id){
+  cur=id;
+  const x=COMP.find(c=>c.id===id),d=DET[id];
+  let h=`<h3>${x.n[L]}</h3>`;
+  if(!d){
+    h+=`<p>${L==='te'?'ఈ భాగానికి వివరణాత్మక పేజీ త్వరలో వస్తుంది.':'The detailed page for this component is coming soon.'}</p>`;
+  }else{
+    h+=sec('sym',`<div class="sym">${SYM[d.sym]}</div>`)
+      +sec('def',`<p>${d.def[L]}</p>`)
+      +sec('work',`<p>${d.work[L]}</p>`)
+      +sec('vals',ul(d.vals[L]))
+      +sec('f',`<div class="formula">${d.f}</div>`)
+      +sec('pins',`<p>${d.pins[L]}</p>`)
+      +sec('apps',ul(d.apps[L]))
+      +sec('adv',ul(d.adv[L]))
+      +sec('lim',ul(d.lim[L]))
+      +sec('ds',`<p>${d.ds[L]}</p>`)
+      +sec('exp',d.exp?`<p><a href="#${d.exp}" onclick="dlg.close()">${EXP[d.exp][L]}</a></p>`:`<p>${L==='te'?'త్వరలో':'Coming soon'}</p>`);
+  }
+  $('#dbody').innerHTML=h;
+  if(!dlg.open)dlg.showModal();
+}
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
+
+function renderLib(){
+  const q=$('#q').value.trim().toLowerCase(),s=$('#sort').value;
+  $('#chips').innerHTML=['all',...Object.keys(CATS)].map(k=>`<button class="chip${k===cat?' on':''}" data-c="${k}">${k==='all'?(L==='te'?'అన్నీ':'All'):CATS[k][L]}</button>`).join('');
+  let it=COMP.filter(x=>(cat==='all'||x.cat===cat)&&(!q||(x.n.te+' '+x.n.en+' '+CATS[x.cat].en).toLowerCase().includes(q)));
+  it.sort((a,b)=>s==='cat'?CATS[a.cat].en.localeCompare(CATS[b.cat].en)
+    :s==='det'?((b.full||0)-(a.full||0))||a.n.en.localeCompare(b.n.en)
+    :a.n.en.localeCompare(b.n.en));
+  $('#grid').innerHTML=it.map(x=>`<button class="card glass" data-id="${x.id}"><small>${CATS[x.cat][L]}</small><b>${x.n[L]}</b><span class="badge${x.full?' on':''}">${x.full?(L==='te'?'వివరణాత్మక గైడ్':'Detailed guide'):(L==='te'?'త్వరలో':'Coming soon')}</span></button>`).join('')
+    ||`<p class="empty">${L==='te'?'ఫలితాలు లేవు':'No results found'}</p>`;
+}
+$('#chips').onclick=e=>{const b=e.target.closest('.chip');if(b){cat=b.dataset.c;renderLib()}};
+$('#grid').onclick=e=>{const c=e.target.closest('.card');if(c)show(c.dataset.id)};
+$('#q').oninput=renderLib;
+$('#sort').onchange=renderLib;
+
+function renderShowcase(){
+  $('#showcase').innerHTML=['res','cap','led'].map(k=>`<div class="glass"><div>${SYM[k]}</div><b>${COMP.find(c=>c.id===k).n[L]}</b></div>`).join('');
+}
+function renderRoad(){
+  const R=[['Semiconductor fundamentals','సెమీకండక్టర్ ప్రాథమికాలు'],['Digital electronics','డిజిటల్ ఎలక్ట్రానిక్స్'],['Boolean algebra','బూలియన్ ఆల్జీబ్రా'],['Logic gates','లాజిక్ గేట్లు'],['CMOS fundamentals','CMOS ప్రాథమికాలు'],['Verilog HDL','Verilog HDL'],['RTL design','RTL డిజైన్'],['Functional verification','ఫంక్షనల్ వెరిఫికేషన్'],['SystemVerilog','SystemVerilog'],['Static timing analysis','స్టాటిక్ టైమింగ్ అనాలిసిస్'],['Physical design','ఫిజికల్ డిజైన్'],['ASIC design flow','ASIC డిజైన్ ఫ్లో'],['FPGA projects','FPGA ప్రాజెక్టులు']];
+  $('#road').innerHTML=R.map((r,i)=>`<li class="glass"><b>${i+1}</b><span class="en">${r[0]}</span><span class="te">${r[1]}</span></li>`).join('');
+}
+
+function ohm(){
+  const v=+$('#ov').value,r=+$('#or').value,i=v/r,p=v*i;
+  $('#ovv').textContent=v.toFixed(1);
+  $('#orv').textContent=r;
+  $('#oi').textContent=(i*1000).toFixed(i<0.1?2:1);
+  $('#op').textContent=(p*1000).toFixed(0);
+  $('#oiL').textContent='I = '+(i*1000).toFixed(1)+' mA';
+  $('#ow').hidden=p<=0.25;
+}
+const E12=[1,1.2,1.5,1.8,2.2,2.7,3.3,3.9,4.7,5.6,6.8,8.2];
+function e12(r){for(let p=1;p<1e8;p*=10)for(const e of E12)if(e*p>=r)return e*p;return r}
+const fmtR=v=>v>=1000?Number((v/1000).toFixed(2))+' kΩ':Math.round(v)+' Ω';
+function led(){
+  const vs=+$('#lv').value,vf=+$('#lc').value,f=+$('#li').value/1000,ok=vs>vf;
+  $('#lvv').textContent=vs.toFixed(1);
+  $('#lw').hidden=ok;
+  if(ok){
+    const r=(vs-vf)/f;
+    $('#lr').textContent=Math.round(r);
+    $('#le').textContent=fmtR(e12(r));
+    $('#lp').textContent=((vs-vf)*f*1000).toFixed(0);
+  }else{$('#lr').textContent='—';$('#le').textContent='—';$('#lp').textContent='—'}
+}
+document.addEventListener('input',e=>{
+  if(e.target.closest('#ohm'))ohm();
+  if(e.target.closest('#led'))led();
+});
+document.addEventListener('change',e=>{if(e.target.closest('#led'))led()});
+
+function setLang(l){
+  L=l;
+  document.documentElement.dataset.lang=l;
+  document.documentElement.lang=l;
+  $('#lang').textContent=l==='te'?'English':'తెలుగు';
+  renderShowcase();renderLib();renderRoad();
+  if(dlg.open)show(cur);
+}
+$('#lang').onclick=()=>setLang(L==='te'?'en':'te');
+$('#theme').onclick=()=>{
+  const r=document.documentElement,d=r.dataset.theme==='light'?'dark':'light';
+  r.dataset.theme=d;
+  $('#theme').textContent=d==='light'?'☀️':'🌙';
+};
+$('#burger').onclick=()=>$('#menu').classList.toggle('open');
+document.querySelectorAll('#menu a').forEach(a=>a.onclick=()=>$('#menu').classList.remove('open'));
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+window.addEventListener('load',()=>setTimeout(()=>$('#ld').classList.add('h'),700));
+setTimeout(()=>$('#ld').classList.add('h'),3000);
+
+setLang('te');
+ohm();led();
+</script>
 </body>
 </html>
