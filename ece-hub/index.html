@@ -3,56 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Electronic components, a VLSI learning roadmap, and 3D component models for ECE students." />
+  <meta name="description" content="ECE B.Tech electronic components, logic gates, VLSI roadmap, and 3D component models." />
   <title>ECE Hub</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=JetBrains+Mono:wght@500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="wrap bar">
-      <a href="#top" class="brand">ECE<span>Hub</span></a>
-      <nav>
-        <a href="#parts">Parts</a>
-        <a href="#roadmap">VLSI roadmap</a>
-        <a href="#lab">3D lab</a>
+  <header class="hero" id="top">
+    <svg class="circuit" viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path class="trace" pathLength="100" d="M0 120H300L340 160H560L600 120H900L940 80H1200" style="--c:#60a5fa;--d:0s" />
+      <path class="trace" pathLength="100" d="M0 330H180L220 290H420V410H760L800 370H1200" style="--c:#f472b6;--d:1.2s" />
+      <path class="trace" pathLength="100" d="M260 500V380L300 340H700L740 300V0" style="--c:#fbbf24;--d:0.6s" />
+      <path class="trace" pathLength="100" d="M1000 500V420H1080L1120 380H1200" style="--c:#34d399;--d:2s" />
+      <circle class="node" cx="600" cy="120" r="7" style="--d:0.4s" />
+      <circle class="node" cx="420" cy="410" r="7" style="--d:1.6s" />
+      <circle class="node" cx="740" cy="300" r="7" style="--d:2.2s" />
+      <circle class="node" cx="800" cy="370" r="7" style="--d:0.9s" />
+    </svg>
+
+    <div class="wrap">
+      <nav class="nav">
+        <a href="#top" class="brand">ECE<b>Hub</b></a>
+        <div class="links">
+          <a href="#parts">Components</a>
+          <a href="#logic">Logic gates</a>
+          <a href="#roadmap">VLSI</a>
+          <a href="#lab">3D lab</a>
+        </div>
       </nav>
+
+      <div class="hero-text">
+        <h1>Electronics, made visible.</h1>
+        <p>The core ECE B.Tech components, logic gates you can flip, a VLSI roadmap, and 3D models you can rotate.</p>
+        <div class="cta">
+          <a class="btn" href="#parts">Explore components</a>
+          <a class="btn ghost" href="#logic">Try logic gates</a>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main id="top">
-    <section class="intro wrap">
-      <h1>Parts, roadmap, and 3D models for ECE students.</h1>
-      <p>Look up what each component does, follow a step-by-step path into chip design, and rotate component models in your browser.</p>
-    </section>
-
-    <section id="parts" class="wrap section">
-      <h2>Electronic components</h2>
-      <div class="tools">
-        <input id="search" type="search" placeholder="Search by name or function" aria-label="Search components" />
-        <div id="filters" class="filters" role="group" aria-label="Filter by category"></div>
+  <main>
+    <section id="parts" class="section" style="--accent:#2563eb">
+      <div class="wrap">
+        <h2 class="reveal">Electronic components</h2>
+        <p class="lead reveal">The parts you meet in a typical ECE B.Tech course, grouped by family.</p>
+        <div class="tools reveal">
+          <input id="search" type="search" placeholder="Search a part or function" aria-label="Search components" />
+          <div id="filters" class="filters" role="group" aria-label="Filter by category"></div>
+        </div>
+        <div id="parts-grid" class="parts-grid"></div>
       </div>
-      <div id="parts-list" class="parts" role="list"></div>
     </section>
 
-    <section id="roadmap" class="wrap section">
-      <h2>VLSI roadmap</h2>
-      <p class="muted">Work through the phases in order. Each one builds on the last.</p>
-      <ol id="timeline" class="timeline"></ol>
+    <section id="logic" class="section" style="--accent:#7c3aed">
+      <div class="wrap">
+        <h2 class="reveal">Logic gates</h2>
+        <p class="lead reveal">Pick a gate, flip the inputs, and watch the output respond.</p>
+        <div id="gate-tabs" class="filters reveal"></div>
+        <div class="sim reveal">
+          <div class="stage">
+            <div id="inputs" class="inputs"></div>
+            <div id="gate-svg" class="gate"></div>
+            <div id="lamp" class="lamp">Y=0</div>
+          </div>
+          <div class="info">
+            <h3 id="gate-name"></h3>
+            <p id="gate-expr" class="expr"></p>
+            <p id="gate-use"></p>
+            <p id="gate-ex" class="muted"></p>
+            <table class="truth">
+              <thead id="truth-head"></thead>
+              <tbody id="truth-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="lab" class="wrap section">
-      <h2>3D component lab</h2>
-      <p class="muted">Drag to rotate. Scroll to zoom.</p>
-      <div id="model-buttons" class="model-buttons"></div>
-      <div id="viewer" class="viewer"></div>
+    <section id="roadmap" class="section" style="--accent:#0d9488">
+      <div class="wrap">
+        <h2 class="reveal">VLSI roadmap</h2>
+        <p class="lead reveal">Follow the phases in order. Each one builds on the last.</p>
+        <ol id="timeline" class="timeline"></ol>
+      </div>
+    </section>
+
+    <section id="lab" class="section" style="--accent:#ea580c">
+      <div class="wrap">
+        <h2 class="reveal">3D component lab</h2>
+        <p class="lead reveal">Choose a part, then drag to rotate and scroll to zoom.</p>
+        <div id="model-buttons" class="filters reveal"></div>
+        <div id="viewer" class="viewer reveal"></div>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer wrap">
-    <p>ECE Hub. To add parts or roadmap steps, edit js/data.js.</p>
+  <footer class="foot">
+    <div class="wrap">ECE Hub. To add parts, gates, or roadmap steps, edit js/data.js.</div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
